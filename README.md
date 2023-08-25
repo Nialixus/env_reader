@@ -1,39 +1,99 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+Absolutely, thank you for the additional information. Here's the updated `README.md` file content with the necessary changes:
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+```markdown
+# env_reader
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+A simple Flutter package for loading and parsing environment variables from a .env file. It provides a convenient way to access environment variables in your Flutter application.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Installation
 
-## Features
+Add the following line to your `pubspec.yaml` file:
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+```yaml
+dependencies:
+  env_reader: ^1.0.0
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+1. Create a `.env` file in your project directory and add your environment variables with the format `KEY=VALUE`. Example:
 
-```dart
-const like = 'sample';
+```plaintext
+API_KEY=your_api_key
+DEBUG=true
 ```
 
-## Additional information
+2. Make sure to add `.env` to your `.gitignore` file to prevent sensitive information from being committed to version control.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+3. Import the package in your Dart file:
+
+```dart
+import 'package:env_reader/env_reader.dart';
+```
+
+4. Load and read environment variables in your application code:
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Load environment variables from the .env file
+  await Env.instance.load();
+  
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Env Reader Example',
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Access environment variables using the Env class
+    final apiKey = Env.read<String>('API_KEY');
+    final debugMode = Env.read<bool>('DEBUG');
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Env Reader Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('API Key: $apiKey'),
+            Text('Debug Mode: $debugMode'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+Please make sure to replace `'API_KEY'` and `'DEBUG'` with your actual environment variable names.
+
+## Features and Notes
+
+- This package provides a straightforward way to load and access environment variables in your Flutter application.
+- It supports common environment variable types like `String`, `int`, `double`, and `bool`.
+- Comment lines in the `.env` file, starting with `#`, are ignored.
+- If an environment variable's value cannot be parsed, it is treated as a `String`.
+
+## Contribution
+
+If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request on [GitHub](https://github.com/your-repo/env_reader).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
+
+Again, replace `"your-repo"` with your actual GitHub repository name.
