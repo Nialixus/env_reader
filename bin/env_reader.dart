@@ -6,6 +6,7 @@ import 'package:universal_file/universal_file.dart';
 part 'src/pubspec.dart';
 part 'src/asset.dart';
 
+/// Dart runner for [EnvReader] library.
 void main(List<String> arguments) async {
   ArgParser runner = ArgParser()
     ..addOption('path', help: 'Path to the .env file')

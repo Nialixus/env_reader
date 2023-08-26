@@ -3,3 +3,5 @@
 * Add .env encryption
 * Add .env sample
 * Add .env reader
+* Add readme
+* Add license

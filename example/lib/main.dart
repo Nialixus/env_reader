@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Env.instance.load(password: "my strong password");
-  runApp(const MaterialApp(title: "Env Reader", debugShowCheckedModeBanner: false, home: MyApp()));
+  runApp(const MaterialApp(
+      title: "Env Reader", debugShowCheckedModeBanner: false, home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text(Env.read<String>("MY_STRING") ?? "Oops")));
+    return Scaffold(
+        body: Center(child: Text(Env.read<String>("MY_STRING") ?? "Oops")));
   }
 }
