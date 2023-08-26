@@ -1,16 +1,18 @@
 name: env_reader
-description: A new Flutter package project.
+description: Effortlessly manage and access secured environment variables across Flutter platforms using this dotenv reader.
 version: 1.0.0
-homepage: null
+homepage: https://github.com/Nialixus/env_reader.git
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
-  flutter: ">=1.17.0"
+  flutter: '>=1.17.0'
 
 dependencies:
-  file_selector: ^1.0.0
+  args: ^2.4.2
+  encryptor: ^0.0.1
   flutter:
     sdk: flutter
+  universal_file: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

@@ -14,8 +14,7 @@
 library env_reader;
 
 import 'dart:async';
-import 'dart:io';
-import 'package:file_selector/file_selector.dart';
+import 'package:encryptor/encryptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -28,13 +27,7 @@ class Env {
   ///
   /// Returns the value associated with the specified [key], or `null` if the key
   /// is not found or there was an error while reading the environment.
-  static T? read<T extends Object>(String key) {
-    try {
-      return instance.toJson()[key];
-    } catch (e) {
-      return null;
-    }
-  }
+  static T? read<T extends Object>(String key) => instance.read<T>(key);
 }
 
 /// A class for loading and parsing environment variables from a .env file.
@@ -44,14 +37,14 @@ class EnvReader {
 
   /// Loads environment variables from a .env file.
   ///
-  /// The [path] parameter specifies the path to the .env file. By default, it
-  /// looks for the .env file in the parent directory.
-  Future<void> load({String? path}) async {
-    final source = path ?? await rootBundle.loadString('packages/env_reader/.env');
+  /// The [asset] parameter specifies the path to the .env file in asset/env/ directory. By default, it
+  /// sets to look for the assets/env/.env file.
+  Future<void> load({String asset = 'assets/env/.env', required String password}) async {
     try {
-      value = await XFile(source).readAsString();
+      String data = await rootBundle.loadString(asset);
+      value = Encryptor.decrypt(password, data);
     } catch (e) {
-      print(e);
+      if (kDebugMode) print("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
       value = null;
     }
   }
@@ -87,9 +80,21 @@ class EnvReader {
           }
         }
       } catch (e) {
-        if (kDebugMode) print("EnvException: $e");
+        if (kDebugMode) print("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed\u001b[0m 💥\n$e\n\n");
       }
     }
     return data;
+  }
+
+  /// Reads an environment variable value of type [T] from the loaded environment.
+  ///
+  /// Returns the value associated with the specified [key], or `null` if the key
+  /// is not found or there was an error while reading the environment.
+  T? read<T extends Object>(String key) {
+    try {
+      return toJson()[key];
+    } catch (e) {
+      return null;
+    }
   }
 }
