@@ -1,99 +1,92 @@
-Absolutely, thank you for the additional information. Here's the updated `README.md` file content with the necessary changes:
+# Env Reader
 
-```markdown
-# env_reader
+<a href='https://pub.dev/packages/env_reader'><img src='https://img.shields.io/pub/v/env_reader.svg?logo=flutter&color=blue&style=flat-square'/></a>\
+\
+Effortlessly manage and access secured environment variables across Flutter platforms using this dotenv reader.
 
-A simple Flutter package for loading and parsing environment variables from a .env file. It provides a convenient way to access environment variables in your Flutter application.
+## Feature
+- **Simplified Access:** Easily load and retrieve environment variables from a .env file using a concise syntax 👌.   
+- **Secure Handling:** Supports encrypted .env files, enhancing security by decrypting sensitive data during loading 🔓.  
+- **Flexible Value Types:** Automatically parses environment values into appropriate data types, such as integers, floating-point numbers, and booleans 🕹.  
+- **Streamlined Integration:** Integrate the library seamlessly into your Flutter project for all of its platform 🚀.
 
-## Installation
+## Install
 
-Add the following line to your `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  env_reader: ^1.0.0
+Run this command to add `env_reader` into your pubspec.yaml
+```bash
+dart pub add env_reader
+```
+  
+now to activate the command line for `env_reader`, you gotta run this command
+```bash
+dart pub global activate env_reader
 ```
 
 ## Usage
 
-1. Create a `.env` file in your project directory and add your environment variables with the format `KEY=VALUE`. Example:
-
-```plaintext
-API_KEY=your_api_key
+First thing to do is making .env file in root directory of your project folder `same directory with pubspec.yaml`.
+Also for suggestion add the .env in your .gitignore.
+```env
+# .env sample file
+API_KEY=my-secret-api-key
 DEBUG=true
+PORT=8080
+DATABASE_URL=postgresql://user:password@localhost:5432/mydb
 ```
 
-2. Make sure to add `.env` to your `.gitignore` file to prevent sensitive information from being committed to version control.
+when you've done it, you will need to run this command.
 
-3. Import the package in your Dart file:
+```bash
+dart run env_reader --path=".env" --password="my strong password"
+```
+
+Notice when you running this command you need to set `--password`, because this function make the .env file publicly accessible for all platfrom in `assets/env/` directory, so atleast you gotta encrypt it right 😉. The `--path` itself is where your original `.env` locate, where it will be turn into secured version in `assets/env/` path, just like this sample message.
+```bash
+.env successfully secured into assets/env/.env 🚀
+```
+so that result path is the asset path where we should set in loading the env_reader instance. 
+
+
+Next step, we need to import this package like this.
 
 ```dart
 import 'package:env_reader/env_reader.dart';
 ```
 
-4. Load and read environment variables in your application code:
-
+And loading the env_reader instance after ensuring WidgetsFlutterBinding to initialized.
 ```dart
-void main() async {
+Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Load environment variables from the .env file
-  await Env.instance.load();
-  
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Env Reader Example',
-      home: MyHomePage(),
-    );
-  }
-}
+  await Env.instance.load(
+    asset: "assets/env/.env",
+    password: "my strong password");
 
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Access environment variables using the Env class
-    final apiKey = Env.read<String>('API_KEY');
-    final debugMode = Env.read<bool>('DEBUG');
-    
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Env Reader Example'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('API Key: $apiKey'),
-            Text('Debug Mode: $debugMode'),
-          ],
-        ),
-      ),
-    );
-  }
+  runApp(...);
 }
 ```
 
-Please make sure to replace `'API_KEY'` and `'DEBUG'` with your actual environment variable names.
+After everything has been set, we fetch the value from .env like this
+```dart
+String api = Env.read("API_KEY") ?? "Got'cha 😎";
+bool debug = Env.read<bool>("DEBUG") ?? false;
 
-## Features and Notes
-
-- This package provides a straightforward way to load and access environment variables in your Flutter application.
-- It supports common environment variable types like `String`, `int`, `double`, and `bool`.
-- Comment lines in the `.env` file, starting with `#`, are ignored.
-- If an environment variable's value cannot be parsed, it is treated as a `String`.
-
-## Contribution
-
-If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request on [GitHub](https://github.com/your-repo/env_reader).
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Text(
+  text: debug ? "🤫 pssst, this is my api key y'all\n\n$api" : "Nothing to see here 🤪",
+  ),
+);
+```
+## Addition
+Currently this library only support on parsing `int`, `double`, `bool` and `String`.
+You can also read the parsed .env in Map<String, dynamic> format by calling this
+```dart
+Map<String, dynamic> json = Env.instance.toJson();
+```
+or if you want to see the original content, you can call this
+```dart
+String? env = Env.instance.value;
 ```
 
-Again, replace `"your-repo"` with your actual GitHub repository name.
+## Example
+
+- <a href="https://github.com/Nialixus/env_reader/blob/main/example/lib/main.dart">env_reader/example/lib/main.dart</a>
