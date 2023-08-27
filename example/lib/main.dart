@@ -1,11 +1,17 @@
 import 'package:env_reader/env_reader.dart';
+import 'package:example/src/env_model.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Env.instance.load(password: "my strong password");
-  runApp(const MaterialApp(
-      title: "Env Reader", debugShowCheckedModeBanner: false, home: MyApp()));
+  await Env.load(path: 'lib/src/.env', password: "MyStrongPassword");
+  runApp(
+    const MaterialApp(
+      title: "Env Reader",
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,6 +20,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: Text(Env.read<String>("MY_STRING") ?? "Oops")));
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(Env.read<String>("MY_STRING") ?? "Oops"),
+            Text(EnvModel.apiKey),
+          ],
+        ),
+      ),
+    );
   }
 }

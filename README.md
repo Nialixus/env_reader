@@ -14,10 +14,10 @@ Effortlessly manage and access secured environment variables across Flutter plat
 
 Run this command to add `env_reader` into your pubspec.yaml
 ```bash
-dart pub add env_reader
+flutter pub add env_reader
 ```
   
-now to activate the command line for `env_reader`, you gotta run this command
+now to activate the cli for `env_reader`, you gotta run this command
 ```bash
 dart pub global activate env_reader
 ```

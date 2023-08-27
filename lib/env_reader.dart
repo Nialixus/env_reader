@@ -22,11 +22,29 @@ import 'dart:async';
 import 'package:encryptor/encryptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_file/universal_file.dart';
 
 /// A utility class for reading environment variables from a .env file.
 class Env {
   /// The instance of [EnvReader] used to read environment variables.
   static EnvReader instance = EnvReader();
+
+  /// Loads environment variables from a .env file.
+  ///
+  /// The [asset] parameter specifies the path to the .env file in asset/env/ directory. By default, it
+  /// sets to look for the `assets/env/.env` file.
+  ///
+  /// ```dart
+  /// Future<void> main(List<String> arguments) async {
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   await Env.load(
+  ///     path: "assets/env/.env",
+  ///     password: "my strong password");
+  ///   runApp(...);
+  /// }
+  /// ```
+  static Future<void> load({String path = 'assets/env/.env', required String password}) =>
+      instance.load(path: path, password: password);
 
   /// Reads an environment variable value of type [T] from the loaded environment.
   ///
@@ -58,21 +76,24 @@ class EnvReader {
   /// ```dart
   /// Future<void> main(List<String> arguments) async {
   ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   await Env.instance.load(
-  ///     asset: "assets/env/.env",
+  ///   await EnvReader().load(
+  ///     path: "assets/env/.env",
   ///     password: "my strong password");
   ///   runApp(...);
   /// }
   /// ```
-  Future<void> load(
-      {String asset = 'assets/env/.env', required String password}) async {
+  Future<void> load({required String path, required String password}) async {
     try {
-      String data = await rootBundle.loadString(asset);
-      value = Encryptor.decrypt(password, data);
+      if (path.startsWith('assets/')) {
+        String data = await rootBundle.loadString(path);
+        value = Encryptor.decrypt(password, data);
+      } else {
+        final file = File(path)..createSync(recursive: true);
+        value = Encryptor.decrypt(password, file.readAsStringSync());
+      }
     } catch (e) {
       if (kDebugMode) {
-        print(
-            "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
+        print("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
       }
       value = null;
     }
@@ -110,8 +131,7 @@ class EnvReader {
         }
       } catch (e) {
         if (kDebugMode) {
-          print(
-              "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed\u001b[0m 💥\n$e\n\n");
+          print("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed\u001b[0m 💥\n$e\n\n");
         }
       }
     }

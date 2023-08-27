@@ -1,3 +1,10 @@
+# Env Reader related
+.env2
+.env.debug
+.env copy
+.envy
+.env
+
 # Miscellaneous
 *.class
 *.log
