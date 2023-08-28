@@ -56,6 +56,6 @@ class EnvModel {
   /// ```dart
   /// Env.read<String>('DATABASE_URL') ?? "DATABASE_URL";
   /// ```
-  static String databaseUrl = Env.read<String>('DATABASE_URL') ?? "DATABASE_URL";
-
+  static String databaseUrl =
+      Env.read<String>('DATABASE_URL') ?? "DATABASE_URL";
 }
