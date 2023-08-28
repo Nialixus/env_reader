@@ -18,7 +18,8 @@ void insertGitignore({required ArgResults from}) {
 
     if (!existed) {
       String comment = "# Env Reader related";
-      int index = lines.lastIndexWhere((line) => line.trim().startsWith(comment));
+      int index =
+          lines.lastIndexWhere((line) => line.trim().startsWith(comment));
       if (index != -1) {
         lines.insert(index + 1, input);
       } else {

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 
 Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Env.load(path: 'lib/src/.env', password: "MyStrongPassword");
+  await Env.load(
+    source: EnvLoader.asset('assets/env/.env'),
+    password: "MyStrongPassword",
+  );
   runApp(
     const MaterialApp(
       title: "Env Reader",

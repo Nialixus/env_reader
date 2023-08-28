@@ -11,14 +11,24 @@ part 'src/gitignore.dart';
 /// Dart runner for [EnvReader] library.
 void main(List<String> arguments) async {
   ArgParser runner = ArgParser()
-    ..addOption('input', abbr: 'i', help: 'Input path of the .env file', mandatory: true)
-    ..addOption('password', abbr: 'p', help: 'Password for encryption & decryption', mandatory: true)
-    ..addOption('output', abbr: 'o', help: 'Custom output path for the encrypted .env file', defaultsTo: 'assets/env/')
+    ..addOption('input',
+        abbr: 'i', help: 'Input path of the .env file', mandatory: true)
+    ..addOption('password',
+        abbr: 'p',
+        help: 'Password for encryption & decryption',
+        mandatory: true)
+    ..addOption('output',
+        abbr: 'o',
+        help: 'Custom output path for the encrypted .env file',
+        defaultsTo: 'assets/env/')
     ..addOption('model', help: 'Generate model.dart file to your desired path')
     ..addFlag('help', abbr: 'h', help: 'Print this usage information')
-    ..addFlag('null-safety', defaultsTo: false, negatable: false, help: 'Make the model null safety')
-    ..addFlag('pubspec', defaultsTo: true, help: 'Inserting asset path to pubspec.yaml')
-    ..addFlag('gitignore', defaultsTo: true, help: 'Inserting .env input file into .gitignore');
+    ..addFlag('null-safety',
+        defaultsTo: false, negatable: false, help: 'Make the model null safety')
+    ..addFlag('pubspec',
+        defaultsTo: true, help: 'Inserting asset path to pubspec.yaml')
+    ..addFlag('gitignore',
+        defaultsTo: true, help: 'Inserting .env input file into .gitignore');
   try {
     ArgResults argument = runner.parse(arguments);
     if (argument["help"]) {

@@ -5,3 +5,10 @@
 * Add .env reader
 * Add readme
 * Add license
+
+## 1.1.0
+* Update pubspec command
+* Update cli
+* Add gitignore command
+* Add model generator command
+* Add EnvLoader {asset, file, memory, network, string}

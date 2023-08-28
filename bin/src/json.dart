@@ -6,7 +6,14 @@ void insertJson({required ArgResults from}) {
   if (model != null) {
     // Fetching arguments
     String path = model.replaceAll(RegExp(r'/[^/]+$'), "/");
-    String name = model.split("/").last.split(".").first.split("_").map((e) => capitalize(e)).join("");
+    String name = model
+        .split("/")
+        .last
+        .split(".")
+        .first
+        .split("_")
+        .map((e) => capitalize(e))
+        .join("");
     String input = from["input"]!.toString();
     String data = File(input).readAsStringSync();
     bool nullSafety = from["null-safety"];
@@ -19,7 +26,7 @@ void insertJson({required ArgResults from}) {
       Type type = e.value.runtimeType;
       String name = dartNamed(e.key);
       String variable = nullSafety
-          ? "Env.read<$type>('${e.key}') ?? ${type == bool ? 'false' : type == int ? '0' : type == double ? '0.0' : '""'}"
+          ? "Env.read<$type>('${e.key}') ?? ${type == bool ? 'false' : type == int ? '0' : type == double ? '0.0' : '"${e.key}"'}"
           : "Env.read<$type>('${e.key}')";
 
       return """
@@ -39,7 +46,7 @@ import 'package:env_reader/env_reader.dart';
 /// Auto-generated environment model class.
 ///
 /// This class represents environment variables parsed from the .env file.
-/// Each static variable corresponds to an environment variable,${nullSafety ? "\n/// with default values provided for safety\n/// `false` for [bool], `0` for [int], `0.0` for [double] and `\"\"` for [String]." : ""}
+/// Each static variable corresponds to an environment variable,${nullSafety ? "\n/// with default values provided for safety\n/// `false` for [bool], `0` for [int], `0.0` for [double] and `VARIABLE_NAME` for [String]." : ""}
 class $name {
 $cast
 }
@@ -48,7 +55,8 @@ $cast
     // Writing file to disk
     Directory(path).createSync(recursive: true);
     File(model).writeAsStringSync(write);
-    print("\x1B[32m$input\x1B[0m successfully mapped into \x1B[34m$model\x1B[0m 🎉");
+    print(
+        "\x1B[32m$input\x1B[0m successfully generated into \x1B[34m$model\x1B[0m 🎉");
   }
 }
 
