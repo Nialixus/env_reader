@@ -15,3 +15,6 @@
 
 ## 1.2.0
 * Fix description too long
+
+## 1.3.0
+* Update readme.md

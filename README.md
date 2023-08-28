@@ -18,7 +18,7 @@ Get started on the path to effortless configuration management with these quick 
 
 🔥 Add `env_reader` to your `pubspec.yaml` with a single line: 
 ```bash
-flutter pub add env_reader
+dart pub add env_reader
 ```
   
 ✨ Unlock the magic by activating the `env_reader` CLI:
@@ -27,13 +27,10 @@ dart pub global activate env_reader
 ```
 
 ## Usage 🚀
-Step into the realm of effortless configuration management and elevate your development experience with these straightforward steps:
+Now elevate your development experience with these straightforward steps:
 
 ### 1. Set up your configuration
 Start by crafting your `.env` file in the root directory of your project, right alongside your trusty `pubspec.yaml`.
-
-First thing to do is making .env file in root directory of your project folder `same directory with pubspec.yaml`.
-Also for suggestion add the .env in your .gitignore.
 ```env
 API_KEY=VYIUJ7tLdJFqrBesnOJEpkbceBB5GNz0t1aYgHxK3BMxbJOc/g==
 DEBUG=true
