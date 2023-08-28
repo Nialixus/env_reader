@@ -100,9 +100,10 @@ packages:
   env_reader:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: env_reader
+      sha256: f5b8c74f257a7489c1197cb0b81974af78067896347fb5a593be0ee48ad364ee
+      url: "https://pub.dev"
+    source: hosted
     version: "1.1.0"
   fake_async:
     dependency: transitive

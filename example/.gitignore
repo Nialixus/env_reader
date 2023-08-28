@@ -1,3 +1,6 @@
+# Env Reader related
+.env
+
 # Miscellaneous
 *.class
 *.log

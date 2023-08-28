@@ -12,3 +12,6 @@
 * Add gitignore command
 * Add model generator command
 * Add EnvLoader {asset, file, memory, network, string}
+
+## 1.2.0
+* Fix description too long
