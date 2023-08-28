@@ -1,5 +1,5 @@
 name: env_reader
-description: Elevate your .env configuration's integrity by encrypting and decrypting across diverse sources—assets, files, strings, memory, and networks—across various platforms. Additionally, simplify Dart model creation from .env data.
+description: Enhance the rock-solid integrity of your .env configuration by seamlessly encrypting and decrypting data sourced from a dynamic range of origins—be it assets, files, strings, memory, or networks—spanning a multitude of platforms. What's more, experience the sheer simplicity of generating Dart models directly from your .env data. Your configuration, fortified and efficient, ready to elevate your development journey.
 version: 1.1.0
 homepage: https://github.com/Nialixus/env_reader.git
 

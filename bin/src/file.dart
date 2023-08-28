@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 part of '../env_reader.dart';
 
-/// A function to take the .env file from given [path] into a more secured version inside [directory].
+/// A function to take the .env file from given [input] into a more secured version inside [directory].
 void insertFile({required ArgResults from}) {
   String input = from['input']!.toString();
   String output = from["output"]!.toString();

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 part of '../env_reader.dart';
 
+/// A function to generate dart model out of .env file
 void insertJson({required ArgResults from}) {
   String? model = from["model"]?.toString();
   if (model != null) {
