@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(Env.read<String>("MY_STRING") ?? "Oops"),
+            Text(Env.read<String>("DATABASE_URL") ?? "Oops"),
             Text(EnvModel.apiKey),
           ],
         ),

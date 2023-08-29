@@ -11,10 +11,8 @@ Enhance the rock-solid integrity of your .env configuration by seamlessly encryp
 - **Data Diversity Unleashed:** Instantly harness the power of automatic data type conversion. From numbers to booleans, your app is empowered. 🎮
 - **Versatile Sourcing**: Unleash your encrypted .env from various sources—assets, files, memory, network, and strings. It's all about choice. 🔄
 
-Step into a realm where automation, security, and flexibility converge to elevate your coding experience. Discover how effortless and impactful .env management can be! 💎🔗
-
 ## Install 🚀
-Get started on the path to effortless configuration management with these quick commands:
+Get started with these quick commands:
 
 🔥 Add `env_reader` to your `pubspec.yaml` with a single line: 
 ```bash
@@ -39,7 +37,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/mydb
 ```
 
 ### 2. Run the command
-After laying down the foundation, it's time to secure your .env masterpiece. Execute this command in your terminal:
+After laying down the foundation, it's time to secure your .env by executing this command in your terminal:
 ```bash
 dart run env_reader --input=".env" --password="MyStrongPassword" --model="lib/src/env_model.dart" --null-safety
 ```
@@ -54,7 +52,7 @@ Built env_reader:env_reader.
 ```
 
 ### 3. Loading your encrypted .env
-Load the env_reader instance, after ensuring your WidgetsFlutterBinding is initialized:
+Load the env_reader instance, after ensuring your WidgetsFlutterBinding was initialized:
 ```dart
 import 'package:env_reader/env_reader.dart';
 
@@ -65,11 +63,19 @@ Future<void> main(List<String> arguments) async {
     source: EnvLoader.asset('assets/env/.env'),
     password: "MyStrongPassword");
 
+  // Or you can load raw .env by calling this function
+
+  await Env.loadExposed(
+    source: EnvLoader.network(
+      Uri.parse('https://my.repo.dir/sub/.env')
+    )
+  )
+
   runApp(...);
 }
 ```
 ### 4. Access your configuration
-And now, the moment of truth—access your configuration values with ease:
+And now, the moment of truth. Aaccess your configuration values with ease:
 ```dart
 import 'package:env_reader/env_reader.dart';
 import 'package:my_package/src/env_model.dart';
@@ -80,7 +86,6 @@ bool debug = Env.read<bool>("DEBUG") ?? false;
 Text(
   text:
     debug ? "🤫 pssst, this is my api key y'all \n\n $api" : "Nothing to see here 🤪",
-  ),
 );
 
 // Or you can access the value directly from env generated model earlier
@@ -88,7 +93,6 @@ Text(
 Text(
   text:
     EnvModel.debug ? "🤫 pssst, this is my api key y'all \n\n ${EnvModel.apiKey}" : "Nothing to see here 🤪",
-  ),
 );
 ```
 
@@ -97,16 +101,16 @@ Available commands:
 
 | Flag                     | Description                                                  |
 |--------------------------|--------------------------------------------------------------|
-| -i, --input (mandatory)  | Input path of the .env file                                 |
-| -p, --password (mandatory)| Password for encryption & decryption                        |
-| -o, --output              | Custom output path for the encrypted .env file              |
+| -i, --input (mandatory)  | Input path of the .env file                                  |
+| -p, --password           | Password for encryption & decryption                         |
+| -o, --output             | Custom output path for the encrypted .env file               |
 |                          | (defaults to "assets/env/")                                  |
-| --model                  | Generate model.dart file to your desired path               |
-| -h, --[no-]help          | Print usage information                                     |
+| --model                  | Generate model.dart file to your desired path                |
+| -h, --[no-]help          | Print usage information                                      |
 | --null-safety            | Make the model null safety                                   |
-| --[no-]pubspec           | Insert asset path to pubspec.yaml                           |
+| --[no-]pubspec           | Insert asset path to pubspec.yaml                            |
 |                          | (defaults to on)                                             |
-| --[no-]gitignore         | Insert .env input file into .gitignore                      |
+| --[no-]gitignore         | Insert .env input file into .gitignore                       |
 |                          | (defaults to on)                                             |
 
 Example usage:

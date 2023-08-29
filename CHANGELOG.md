@@ -18,3 +18,7 @@
 
 ## 1.3.0
 * Update readme.md
+
+## 1.4.0
+* Add loadExposed (raw) .env
+* Password no longer mandatory

@@ -14,9 +14,7 @@ void main(List<String> arguments) async {
     ..addOption('input',
         abbr: 'i', help: 'Input path of the .env file', mandatory: true)
     ..addOption('password',
-        abbr: 'p',
-        help: 'Password for encryption & decryption',
-        mandatory: true)
+        abbr: 'p', help: 'Password for encryption & decryption')
     ..addOption('output',
         abbr: 'o',
         help: 'Custom output path for the encrypted .env file',

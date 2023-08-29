@@ -49,6 +49,22 @@ class Env {
           {required EnvLoader source, required String password}) =>
       instance.load(source: source, password: password);
 
+  /// Loads raw environment variables from an exposed .env source.
+  ///
+  /// The [source] parameter specifies where's the encrypted .env took place.
+  ///
+  /// ```dart
+  /// Future<void> main(List<String> arguments) async {
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   await Env.loadExposed(
+  ///     source: EnvLoader.asset('assets/env/.env'),
+  ///   );
+  ///   runApp(...);
+  /// }
+  /// ```
+  static Future<void> loadExposed({required EnvLoader source}) =>
+      instance.loadExposed(source: source);
+
   /// Reads an environment variable value of type [T] from the loaded environment.
   ///
   /// Returns the value associated with the specified [key], or `null` if the key
@@ -107,7 +123,44 @@ class EnvReader {
         print(
             "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
       }
-      value = null;
+    }
+  }
+
+  /// Loads raw environment variables from an exposed .env source.
+  ///
+  /// The [source] parameter specifies where's the encrypted .env took place.
+  ///
+  /// ```dart
+  /// Future<void> main(List<String> arguments) async {
+  ///   WidgetsFlutterBinding.ensureInitialized();
+  ///   await Env.loadExposed(
+  ///     source: EnvLoader.asset('assets/env/.env'),
+  ///   );
+  ///   runApp(...);
+  /// }
+  /// ```
+  Future<void> loadExposed({required EnvLoader source}) async {
+    try {
+      if (source is EnvAssetLoader) {
+        String data = await rootBundle.loadString(source.source);
+        value = data;
+      } else if (source is EnvFileLoader) {
+        String data = await (source.source).readAsString();
+        value = data;
+      } else if (source is EnvMemoryLoader) {
+        String data = String.fromCharCodes(source.source);
+        value = data;
+      } else if (source is EnvNetworkLoader) {
+        Response response = await get(source.source);
+        value = response.body;
+      } else {
+        value = source.source.toString();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(
+            "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
+      }
     }
   }
 

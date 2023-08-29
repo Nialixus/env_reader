@@ -31,6 +31,8 @@ abstract class EnvLoader<T extends Object> {
   final T source;
 
   /// Indicating what type the encrypted .env is
+  ///
+  /// Consist of [EnvLoaderType.asset], [EnvLoaderType.file], [EnvLoaderType.memory], [EnvLoaderType.network] and [EnvLoaderType.string]
   EnvLoaderType type();
 
   /// Loading encrypted .env from asset used in flutter project.
@@ -96,6 +98,12 @@ class EnvAssetLoader extends EnvLoader<String> {
 }
 
 /// A class to help user load their encrypted .env from file.
+///
+/// ```dart
+/// await Env.load(
+///   source: EnvLoader.file(File('.env')),
+///   password: "MyStrongPassword");
+/// ```
 class EnvFileLoader extends EnvLoader<File> {
   /// Loading encrypted .env from file. Make sure this file is accessible in your project.
   /// If its not, it will throws `PathNotFoundException`.
@@ -112,6 +120,12 @@ class EnvFileLoader extends EnvLoader<File> {
 }
 
 /// A class to help user load their encrypted .env from [Uint8List].
+///
+/// ```dart
+/// await Env.load(
+///   source: EnvLoader.memory(Uint8List.fromList([123,456,789])),
+///   password: "MyStrongPassword");
+/// ```
 class EnvMemoryLoader extends EnvLoader<Uint8List> {
   /// Loading encrypted .env from file from memory.
   ///
@@ -127,6 +141,12 @@ class EnvMemoryLoader extends EnvLoader<Uint8List> {
 }
 
 /// A class to help user load their encrypted .env from network.
+///
+/// ```dart
+/// await Env.load(
+///   source: EnvLoader.network(Uri.parse('https://my.repo.dir/sub/.env')),
+///   password: "MyStrongPassword");
+/// ```
 class EnvNetworkLoader extends EnvLoader<Uri> {
   /// Loading encrypted .env from file from network.
   ///
@@ -142,6 +162,12 @@ class EnvNetworkLoader extends EnvLoader<Uri> {
 }
 
 /// A class to help user load their encrypted .env from string.
+///
+/// ```dart
+/// await Env.load(
+///   source: EnvLoader.string('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
+///   password: "MyStrongPassword");
+/// ```
 class EnvStringLoader extends EnvLoader<String> {
   /// Loading encrypted .env from file from string.
   ///
