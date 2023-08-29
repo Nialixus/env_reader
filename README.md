@@ -5,11 +5,11 @@
 Enhance the rock-solid integrity of your .env configuration by seamlessly encrypting and decrypting data sourced from a dynamic range of origins—be it assets, files, strings, memory, or networks—spanning a multitude of platforms. What's more, experience the sheer simplicity of generating Dart models directly from your .env data. Your configuration, fortified and efficient, ready to elevate your development journey. 🌟🛡️
 
 ## Features 🚀
-- **Automated Magic:** Transform your .env files into dynamic Dart models effortlessly. Watch your codebase evolve with automatic model generation!. ✨
-- **Seamless Integration:** Keep your pubspec.yaml and .gitignore in harmony with your .env files. Updates happen seamlessly, leaving you with more time to create. 🛠️ 
-- **Fortified Encryption:** Shield your precious .env configurations from prying eyes with top-tier encryption. Your secrets remain yours. 🔒  
-- **Data Diversity Unleashed:** Instantly harness the power of automatic data type conversion. From numbers to booleans, your app is empowered. 🎮
-- **Versatile Sourcing**: Unleash your encrypted .env from various sources—assets, files, memory, network, and strings. It's all about choice. 🔄
+- **Automated Generation:** Transform your .env files into dynamic Dart models directly. No need to add annotation. ✨
+- **Seamless Integration:** Directly update your pubspec.yaml and .gitignore on command. No need manual labor. 🛠️ 
+- **Fortified Encryption:** Shield your precious .env configurations with an encryption. Say no to prying eyes.🔒  
+- **Data Diversity Unleashed:** Whether they're integers, decimals, booleans, or strings. Automatic interpretation is at your service. 🎮
+- **Versatile Sourcing**: Load your .env from various sources-assets, files, memory, network, and strings. The choice is yours. 🔄
 
 ## Install 🚀
 Get started with these quick commands:
@@ -67,9 +67,7 @@ Future<void> main(List<String> arguments) async {
 
   await Env.loadExposed(
     source: EnvLoader.network(
-      Uri.parse('https://my.repo.dir/sub/.env')
-    )
-  )
+      Uri.parse('https://my.repo.dir/sub/.env')));
 
   runApp(...);
 }
