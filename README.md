@@ -113,7 +113,7 @@ Available commands:
 
 Example usage:
 ```bash
-dart run env_reader --input=".env" --password="MyStrongPassword" --model="lib/src/env_model.dart" --null-safety --no-pubspec --no-gitignore --output="assets/env/custom.env"
+dart run env_reader -i ".env" -p "MyStrongPassword" --model="lib/src/env_model.dart" --null-safety --no-pubspec --no-gitignore -o "assets/env/custom.env"
 ```
 
 

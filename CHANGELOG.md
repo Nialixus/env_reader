@@ -22,3 +22,6 @@
 ## 1.4.0
 * Add loadExposed (raw) .env
 * Password no longer mandatory
+
+## 1.5.0
+* Automatically add output into .gitignore

@@ -1,6 +1,6 @@
 name: env_reader
-description: Streamline environment configuration with encrypted `.env` files and auto-generated Dart models using env_reader.
-version: 1.4.0
+description: Read Encrypted Env Configuration or Generate Dart Models from Env Files with Ease.
+version: 1.5.0
 homepage: https://github.com/Nialixus/env_reader.git
 
 environment:
