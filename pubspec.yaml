@@ -5,7 +5,7 @@ homepage: https://github.com/Nialixus/env_reader.git
 funding: 
   - https://www.buymeacoffee.com/nialixus
 screenshots:
-  - description: 'Env Reader Dall-E Logo'
+  - description: 'Env Reader Logo'
     path: logo.png
 topics:
   - utility
