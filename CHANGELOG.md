@@ -25,3 +25,6 @@
 
 ## 1.5.0
 * Automatically add output into .gitignore
+
+## 1.6.0
+* Update pubspec
