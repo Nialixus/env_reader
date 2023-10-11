@@ -16,6 +16,7 @@ void insertJson({required ArgResults from}) {
         .map((e) => capitalize(e))
         .join("");
     String input = from["input"]!.toString();
+    bool obfuscate = from['obfuscate'];
     String data = File(input).readAsStringSync();
     bool nullSafety = from["null-safety"];
 
@@ -26,28 +27,35 @@ void insertJson({required ArgResults from}) {
     String cast = json.entries.map((e) {
       Type type = e.value.runtimeType;
       String name = dartNamed(e.key);
-      String variable = nullSafety
-          ? "Env.read<$type>('${e.key}') ?? ${type == bool ? 'false' : type == int ? '0' : type == double ? '0.0' : "'${e.key}'"}"
-          : "Env.read<$type>('${e.key}')";
+      if (obfuscate) {
+        String variable = nullSafety
+            ? "Env.read<$type>('${e.key}') ?? ${type == bool ? 'false' : type == int ? '0' : type == double ? '0.0' : "'${e.key}'"}"
+            : "Env.read<$type>('${e.key}')";
 
-      return """
+        return """
   /// Value of `${e.key}` in environment variable. This is equal to
   /// ```dart
   /// $variable;
   /// ```
   static $type${nullSafety ? "" : "?"} $name = $variable;
 """;
+      } else {
+        return """
+  /// Value of `${e.key}` in environment variable. This is equal to
+  /// ```dart
+  /// $type $name = Env.read<$type>('${e.key}') ?? ${type == bool ? 'false' : type == int ? '0' : type == double ? '0.0' : "'${e.key}'"};
+  /// print($name); // ${e.value}
+  /// ```
+  static const $type $name = ${type == String ? "'${e.value}'" : e.value ?? 'e.key'};
+""";
+      }
     }).join("\n");
     String write = """
 // Env Reader Auto-Generated Model File
 // Created at ${DateTime.now()}
 // 🍔 [Buy me a coffee](https://www.buymeacoffee.com/nialixus) 🚀
-import 'package:env_reader/env_reader.dart';
-
-/// Auto-generated environment model class.
-///
-/// This class represents environment variables parsed from the .env file.
-/// Each static variable corresponds to an environment variable,${nullSafety ? "\n/// with default values provided for safety\n/// `false` for [bool], `0` for [int], `0.0` for [double] and `VARIABLE_NAME` for [String]." : ""}
+${obfuscate ? "import 'package:env_reader/env_reader.dart';\n" : ''}
+${obfuscate ? "/// This class represents environment variables parsed from the .env file.\n/// Each static variable corresponds to an environment variable,${nullSafety ? "\n/// with default values provided for safety\n/// `false` for [bool], `0` for [int], `0.0` for [double] and `VARIABLE_NAME` for [String]." : ""}" : "/// Class wrapper for duplicated values copied directly from env file"}
 class $name {
 $cast
 }

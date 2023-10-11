@@ -13,20 +13,25 @@ void main(List<String> arguments) async {
   ArgParser runner = ArgParser()
     ..addOption('input',
         abbr: 'i', help: 'Input path of the .env file', mandatory: true)
-    ..addOption('password',
-        abbr: 'p', help: 'Password for encryption & decryption')
     ..addOption('output',
-        abbr: 'o',
-        help: 'Custom output path for the encrypted .env file',
-        defaultsTo: 'assets/env/')
-    ..addOption('model', help: 'Generate model.dart file to your desired path')
-    ..addFlag('help', abbr: 'h', help: 'Print this usage information')
+        abbr: 'o', help: 'Output path for the encrypted .env file')
+    ..addOption('key',
+        abbr: 's', help: 'Secret key for encryption & decryption')
+    ..addOption('model', help: 'Generate dart model to your desired file path')
     ..addFlag('null-safety',
         defaultsTo: false, negatable: false, help: 'Make the model null safety')
+    ..addFlag('obfuscate',
+        defaultsTo: true, help: 'Obfuscating generated values of model')
     ..addFlag('pubspec',
         defaultsTo: true, help: 'Inserting asset path to pubspec.yaml')
     ..addFlag('gitignore',
-        defaultsTo: true, help: 'Inserting .env input file into .gitignore');
+        defaultsTo: true,
+        help: 'Inserting .env input & output file into .gitignore')
+    ..addFlag('help',
+        defaultsTo: false,
+        abbr: 'h',
+        negatable: false,
+        help: 'Print this usage information');
   try {
     ArgResults argument = runner.parse(arguments);
     if (argument["help"]) {

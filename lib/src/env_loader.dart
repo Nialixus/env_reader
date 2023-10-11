@@ -15,7 +15,10 @@ enum EnvLoaderType {
   network,
 
   /// Load environment configuration from a string.
-  string,
+  string;
+
+  /// Default constructor of [EnvLoaderType].
+  const EnvLoaderType();
 }
 
 /// Used to refering where's the encrypted .env file came from.
@@ -34,15 +37,6 @@ abstract class EnvLoader<T extends Object> {
   ///
   /// Consist of [EnvLoaderType.asset], [EnvLoaderType.file], [EnvLoaderType.memory], [EnvLoaderType.network] and [EnvLoaderType.string]
   EnvLoaderType type();
-
-  /// Loading encrypted .env from asset used in flutter project.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.asset('assets/env/.env'),
-  ///   password: "MyStrongPassword");
-  /// ```
-  static EnvAssetLoader asset(String source) => EnvAssetLoader(source);
 
   /// Loading encrypted .env from file. Make sure this file is accessible in your project.
   /// If its not, it will throws `PathNotFoundException`.
@@ -80,21 +74,6 @@ abstract class EnvLoader<T extends Object> {
   ///   password: "MyStrongPassword");
   /// ```
   static EnvStringLoader string(String source) => EnvStringLoader(source);
-}
-
-/// A class to help user load their encrypted .env from asset. Suitable for flutter project.
-class EnvAssetLoader extends EnvLoader<String> {
-  /// Loading encrypted .env from asset used in flutter project.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.asset('assets/env/.env'),
-  ///   password: "MyStrongPassword");
-  /// ```
-  const EnvAssetLoader(super.source);
-
-  @override
-  EnvLoaderType type() => EnvLoaderType.asset;
 }
 
 /// A class to help user load their encrypted .env from file.

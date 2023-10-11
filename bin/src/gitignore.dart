@@ -6,7 +6,7 @@ void insertGitignore({required ArgResults from}) {
   if (insert) {
     File gitignore = File('.gitignore');
     String input = from["input"]!.toString();
-    String output = from["output"]!.toString();
+    String? output = from["output"]?.toString();
     List<String> lines = gitignore.readAsLinesSync();
     bool inputExisted = false;
     bool outputExisted = false;
@@ -18,10 +18,12 @@ void insertGitignore({required ArgResults from}) {
       }
     }
 
-    for (var item in lines) {
-      if (item.contains(output)) {
-        outputExisted = true;
-        break;
+    if (output != null) {
+      for (var item in lines) {
+        if (item.contains(output)) {
+          outputExisted = true;
+          break;
+        }
       }
     }
 
@@ -36,7 +38,7 @@ void insertGitignore({required ArgResults from}) {
       }
     }
 
-    if (!outputExisted) {
+    if (!outputExisted && output != null) {
       String comment = "# Env Reader related";
       int index =
           lines.lastIndexWhere((line) => line.trim().startsWith(comment));

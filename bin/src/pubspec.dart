@@ -6,7 +6,8 @@ part of '../env_reader.dart';
 void insertPubspec({required ArgResults from}) {
   bool insert = from["pubspec"] ?? true;
   String input = from["input"]!.toString();
-  if (insert) {
+  String? output = from['output']?.toString();
+  if (insert && output != null) {
     String output =
         from["output"]!.toString().replaceAll(RegExp(r'/[^/]+$'), "/");
     if (output.startsWith("assets/")) {

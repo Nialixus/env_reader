@@ -1,10 +1,8 @@
 // Env Reader Auto-Generated Model File
-// Created at 2023-08-29 10:08:02.009503
+// Created at 2023-10-11 15:28:35.710424
 // 🍔 [Buy me a coffee](https://www.buymeacoffee.com/nialixus) 🚀
 import 'package:env_reader/env_reader.dart';
 
-/// Auto-generated environment model class.
-///
 /// This class represents environment variables parsed from the .env file.
 /// Each static variable corresponds to an environment variable,
 /// with default values provided for safety

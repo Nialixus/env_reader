@@ -6,12 +6,11 @@
 ///
 /// Example:
 /// ```dart
-/// Future<void> main(List<String> arguments) async {
-///   WidgetsFlutterBinding.ensureInitialized();
-///   await Env.instance.load(password: "my strong password");
-///   runApp(...);
-/// }
+/// // Loading env data
+/// String asset = await rootBundle.loadString('assets/env/.env');
+/// await Env.load(EnvLoader.string(asset), 'MySecretKey');
 ///
+/// // Using env data
 /// String? api = Env.read<String>("API_KEY");
 /// int port = Env.read<int>("PORT") ?? 8080;
 /// bool isDebug = Env.read<bool>("DEBUG") ?? false;
@@ -19,51 +18,29 @@
 library env_reader;
 
 import 'dart:async';
+import 'dart:developer';
+import 'dart:typed_data';
 import 'package:encryptor/encryptor.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:universal_file/universal_file.dart';
 
 part 'src/env_loader.dart';
 
-/// A utility class for reading environment variables from an encrypted .env source.
+/// A utility class for reading environment variables from .env source.
 class Env {
   /// The instance of [EnvReader] used to read environment variables.
   static EnvReader instance = EnvReader();
 
-  /// Loads environment variables from an encrypted .env source.
+  /// Loads environment variables from .env source.
   ///
-  /// The [source] parameter specifies where's the encrypted .env took place.
-  ///
-  /// ```dart
-  /// Future<void> main(List<String> arguments) async {
-  ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   await Env.load(
-  ///     source: EnvLoader.asset('assets/env/.env'),
-  ///     password: "my strong password");
-  ///   runApp(...);
-  /// }
-  /// ```
-  static Future<void> load(
-          {required EnvLoader source, required String password}) =>
-      instance.load(source: source, password: password);
-
-  /// Loads raw environment variables from an exposed .env source.
-  ///
-  /// The [source] parameter specifies where's the encrypted .env took place.
+  /// The [source] parameter specifies where's the .env took place.
   ///
   /// ```dart
-  /// Future<void> main(List<String> arguments) async {
-  ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   await Env.loadExposed(
-  ///     source: EnvLoader.asset('assets/env/.env'),
-  ///   );
-  ///   runApp(...);
-  /// }
+  /// String asset = await rootBundle.loadString('assets/env/.env');
+  /// await Env.load(EnvLoader.string(asset), 'MySecretKey');
   /// ```
-  static Future<void> loadExposed({required EnvLoader source}) =>
-      instance.loadExposed(source: source);
+  static Future<void> load(EnvLoader source, [String? key]) =>
+      instance.load(source, key);
 
   /// Reads an environment variable value of type [T] from the loaded environment.
   ///
@@ -78,7 +55,7 @@ class Env {
   static T? read<T extends Object>(String key) => instance.read<T>(key);
 }
 
-/// A class for loading and parsing environment variables from an encrypted .env source.
+/// A class for loading and parsing environment variables from .env source.
 class EnvReader {
   /// Decrypted value of its loaded environment configuration.
   ///
@@ -87,80 +64,33 @@ class EnvReader {
   /// ```
   String? value;
 
-  /// Loads environment variables from an encrypted .env source.
+  /// Loads environment variables from .env source.
   ///
-  /// The [source] parameter specifies where's the encrypted .env took place.
+  /// The [source] parameter specifies where's the .env file took place.
   ///
-  /// ```dart
-  /// Future<void> main(List<String> arguments) async {
-  ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   await Env.load(
-  ///     source: EnvLoader.asset('assets/env/.env'),
-  ///     password: "my strong password");
-  ///   runApp(...);
-  /// }
+  ///  ```dart
+  /// String asset = await rootBundle.loadString('assets/env/.env');
+  /// await Env.load(EnvLoader.string(asset), 'MySecretKey');
   /// ```
-  Future<void> load(
-      {required EnvLoader source, required String password}) async {
+  Future<void> load(EnvLoader source, [String? key]) async {
     try {
-      if (source is EnvAssetLoader) {
-        String data = await rootBundle.loadString(source.source);
-        value = Encryptor.decrypt(password, data);
-      } else if (source is EnvFileLoader) {
+      if (source is EnvFileLoader) {
         String data = await (source.source).readAsString();
-        value = Encryptor.decrypt(password, data);
+        value = key != null ? Encryptor.decrypt(key, data) : data;
       } else if (source is EnvMemoryLoader) {
         String data = String.fromCharCodes(source.source);
-        value = Encryptor.decrypt(password, data);
+        value = key != null ? Encryptor.decrypt(key, data) : data;
       } else if (source is EnvNetworkLoader) {
         Response response = await get(source.source);
-        value = Encryptor.decrypt(password, response.body);
+        value =
+            key != null ? Encryptor.decrypt(key, response.body) : response.body;
       } else {
-        value = Encryptor.decrypt(password, source.source.toString());
+        value = key != null
+            ? Encryptor.decrypt(key, source.source.toString())
+            : source.source.toString();
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(
-            "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
-      }
-    }
-  }
-
-  /// Loads raw environment variables from an exposed .env source.
-  ///
-  /// The [source] parameter specifies where's the encrypted .env took place.
-  ///
-  /// ```dart
-  /// Future<void> main(List<String> arguments) async {
-  ///   WidgetsFlutterBinding.ensureInitialized();
-  ///   await Env.loadExposed(
-  ///     source: EnvLoader.asset('assets/env/.env'),
-  ///   );
-  ///   runApp(...);
-  /// }
-  /// ```
-  Future<void> loadExposed({required EnvLoader source}) async {
-    try {
-      if (source is EnvAssetLoader) {
-        String data = await rootBundle.loadString(source.source);
-        value = data;
-      } else if (source is EnvFileLoader) {
-        String data = await (source.source).readAsString();
-        value = data;
-      } else if (source is EnvMemoryLoader) {
-        String data = String.fromCharCodes(source.source);
-        value = data;
-      } else if (source is EnvNetworkLoader) {
-        Response response = await get(source.source);
-        value = response.body;
-      } else {
-        value = source.source.toString();
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(
-            "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
-      }
+      log("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
     }
   }
 
@@ -195,10 +125,7 @@ class EnvReader {
           }
         }
       } catch (e) {
-        if (kDebugMode) {
-          print(
-              "\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed\u001b[0m 💥\n$e\n\n");
-        }
+        log("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed\u001b[0m 💥\n$e\n\n");
       }
     }
     return data;
