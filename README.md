@@ -1,12 +1,11 @@
 <p align="center">
   <img src='https://user-images.githubusercontent.com/45191605/274121951-21239cc4-37b3-4dd2-864f-d5f528da4e22.png' width=200 height=200/>
+  <br>
+  <a href='https://pub.dev/packages/env_reader'><img src='https://img.shields.io/pub/v/env_reader.svg?logo=flutter&color=blue&style=flat-square'/></a>
 </p>
 
 # Env Reader
-
-<a href='https://pub.dev/packages/env_reader'><img src='https://img.shields.io/pub/v/env_reader.svg?logo=flutter&color=blue&style=flat-square'/></a>\
-\
-Enhance the rock-solid integrity of your .env configuration by seamlessly encrypting and decrypting data sourced from a dynamic range of origins—be it assets, files, strings, memory, or networks—spanning a multitude of platforms. What's more, experience the sheer simplicity of generating Dart models directly from your .env data. Your configuration, fortified and efficient, ready to elevate your development journey. 🌟🛡️
+Read, encrypt, or generate environment variables from .env file into an obfuscated Dart model.
 
 ## Features 🚀
 - **Automated Generation:** Transform your .env files into dynamic Dart models directly. No need to add annotation. ✨
