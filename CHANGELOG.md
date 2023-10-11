@@ -31,7 +31,13 @@
 
 ## 1.7.0
 * Change loader format
+* Remove asset loader
 * Update logo
 * Update documentation
 * Add flag obfuscate
+* Remove flutter from pubspec
+
+## 1.8.0
+* Restore flutter to pubspec
+* Restore asset loader
 * Remove universal_file
