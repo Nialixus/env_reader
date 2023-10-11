@@ -37,7 +37,7 @@
 * Add flag obfuscate
 * Remove flutter from pubspec
 
-## 1.8.0
+## 1.7.1
 * Restore flutter to pubspec
 * Restore asset loader
 * Remove universal_file
