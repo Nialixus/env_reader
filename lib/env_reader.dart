@@ -1,14 +1,15 @@
 /// A simple utility for reading and parsing environment variables from a .env file.
 ///
 /// This library provides a way to load environment variables from a .env file
-/// and parse them into a map, allowing you to easily access environment values
+/// and parse them into a Map<String, dynamic>, allowing you to easily access environment values
 /// in your Flutter application.
 ///
 /// Example:
 /// ```dart
 /// // Loading env data
-/// String asset = await rootBundle.loadString('assets/env/.env');
-/// await Env.load(EnvLoader.string(asset), 'MySecretKey');
+/// await Env.load(
+///   EnvAssetLoader('assets/env/.env'),
+///   'MySecretKey');
 ///
 /// // Using env data
 /// String? api = Env.read<String>("API_KEY");
@@ -19,16 +20,16 @@ library env_reader;
 
 import 'dart:async';
 import 'dart:developer';
-import 'dart:typed_data';
+import 'dart:io';
 import 'package:encryptor/encryptor.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'package:universal_file/universal_file.dart';
 
 part 'src/env_loader.dart';
 
 /// A utility class for reading environment variables from .env source.
 class Env {
-  /// The instance of [EnvReader] used to read environment variables.
+  /// Default instance of [EnvReader] used to read environment variables.
   static EnvReader instance = EnvReader();
 
   /// Loads environment variables from .env source.
@@ -36,8 +37,9 @@ class Env {
   /// The [source] parameter specifies where's the .env took place.
   ///
   /// ```dart
-  /// String asset = await rootBundle.loadString('assets/env/.env');
-  /// await Env.load(EnvLoader.string(asset), 'MySecretKey');
+  /// await Env.load(
+  ///   EnvAssetLoader('assets/env/.env'),
+  ///   'MySecretKey');
   /// ```
   static Future<void> load(EnvLoader source, [String? key]) =>
       instance.load(source, key);
@@ -55,12 +57,12 @@ class Env {
   static T? read<T extends Object>(String key) => instance.read<T>(key);
 }
 
-/// A class for loading and parsing environment variables from .env source.
+/// An instance to load and parse environment variables from .env into dart object.
 class EnvReader {
-  /// Decrypted value of its loaded environment configuration.
+  /// Loaded value of .env
   ///
   /// ```dart
-  /// String? env = EnvReader().value;
+  /// String? rawValue = EnvReader().value;
   /// ```
   String? value;
 
@@ -69,12 +71,16 @@ class EnvReader {
   /// The [source] parameter specifies where's the .env file took place.
   ///
   ///  ```dart
-  /// String asset = await rootBundle.loadString('assets/env/.env');
-  /// await Env.load(EnvLoader.string(asset), 'MySecretKey');
+  /// await Env.load(
+  ///   EnvAssetLoader('assets/env/.env'),
+  ///   'MySecretKey');
   /// ```
   Future<void> load(EnvLoader source, [String? key]) async {
     try {
-      if (source is EnvFileLoader) {
+      if (source is EnvAssetLoader) {
+        String data = await rootBundle.loadString(source.source);
+        value = key != null ? Encryptor.decrypt(key, data) : data;
+      } else if (source is EnvFileLoader) {
         String data = await (source.source).readAsString();
         value = key != null ? Encryptor.decrypt(key, data) : data;
       } else if (source is EnvMemoryLoader) {
@@ -97,9 +103,9 @@ class EnvReader {
   /// Parses environment variables into a json structured map.
   ///
   /// ```dart
-  /// Map<String, dynamic> json = Env.instance.toJson();
+  /// Map<String, dynamic> json = EnvReader().toJson;
   /// ```
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> get toJson {
     final data = <String, dynamic>{};
     final lines = (value ?? "").trim().split('\n');
 
@@ -144,7 +150,7 @@ class EnvReader {
   /// ```
   T? read<T extends Object>(String key) {
     try {
-      return toJson()[key];
+      return toJson[key];
     } catch (e) {
       return null;
     }

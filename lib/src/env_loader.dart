@@ -37,60 +37,23 @@ abstract class EnvLoader<T extends Object> {
   ///
   /// Consist of [EnvLoaderType.asset], [EnvLoaderType.file], [EnvLoaderType.memory], [EnvLoaderType.network] and [EnvLoaderType.string]
   EnvLoaderType type();
-
-  /// Loading encrypted .env from file. Make sure this file is accessible in your project.
-  /// If its not, it will throws `PathNotFoundException`.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.file(File('.env')),
-  ///   password: "MyStrongPassword");
-  /// ```
-  static EnvFileLoader file(File source) => EnvFileLoader(source);
-
-  /// Loading encrypted .env from file from memory.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.memory(Uint8List.fromList([123,456,789])),
-  ///   password: "MyStrongPassword");
-  /// ```
-  static EnvMemoryLoader memory(Uint8List source) => EnvMemoryLoader(source);
-
-  /// Loading encrypted .env from file from network.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.network(Uri.parse('https://my.repo.dir/sub/.env')),
-  ///   password: "MyStrongPassword");
-  /// ```
-  static EnvNetworkLoader network(Uri source) => EnvNetworkLoader(source);
-
-  /// Loading encrypted .env from file from string.
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   source: EnvLoader.string('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
-  ///   password: "MyStrongPassword");
-  /// ```
-  static EnvStringLoader string(String source) => EnvStringLoader(source);
 }
 
-/// A class to help user load their encrypted .env from file.
+/// A class to help user load their .env data from [File].
 ///
 /// ```dart
 /// await Env.load(
-///   source: EnvLoader.file(File('.env')),
-///   password: "MyStrongPassword");
+///   EnvFileLoader(File('.env')),
+///   "MyOptionalSecretKey");
 /// ```
 class EnvFileLoader extends EnvLoader<File> {
-  /// Loading encrypted .env from file. Make sure this file is accessible in your project.
+  /// Loading .env data from [File]. Make sure this file is accessible in your project.
   /// If its not, it will throws `PathNotFoundException`.
   ///
   /// ```dart
   /// await Env.load(
-  ///   source: EnvLoader.file(File('.env')),
-  ///   password: "MyStrongPassword");
+  ///   EnvFileLoader(File('.env')),
+  ///   "MyOptionalSecretKey");
   /// ```
   const EnvFileLoader(super.source);
 
@@ -98,20 +61,20 @@ class EnvFileLoader extends EnvLoader<File> {
   EnvLoaderType type() => EnvLoaderType.file;
 }
 
-/// A class to help user load their encrypted .env from [Uint8List].
+/// A class to help user load their .env data from [Uint8List].
 ///
 /// ```dart
 /// await Env.load(
-///   source: EnvLoader.memory(Uint8List.fromList([123,456,789])),
-///   password: "MyStrongPassword");
+///   EnvMemoryLeader(Uint8List.fromList([123,456,789])),
+///   "MyOptionalSecretKey");
 /// ```
 class EnvMemoryLoader extends EnvLoader<Uint8List> {
-  /// Loading encrypted .env from file from memory.
+  /// Loading .env data from [Uint8List].
   ///
   /// ```dart
   /// await Env.load(
-  ///   source: EnvLoader.memory(Uint8List.fromList([123,456,789])),
-  ///   password: "MyStrongPassword");
+  ///   EnvMemoryLoader(Uint8List.fromList([123,456,789])),
+  ///   "MyOptionalSecretKey");
   /// ```
   const EnvMemoryLoader(super.source);
 
@@ -119,20 +82,20 @@ class EnvMemoryLoader extends EnvLoader<Uint8List> {
   EnvLoaderType type() => EnvLoaderType.memory;
 }
 
-/// A class to help user load their encrypted .env from network.
+/// A class to help user load their .env data from network.
 ///
 /// ```dart
 /// await Env.load(
-///   source: EnvLoader.network(Uri.parse('https://my.repo.dir/sub/.env')),
-///   password: "MyStrongPassword");
+///   EnvNetworkLoader(Uri.parse('https://my.repo.dir/sub/.env')),
+///   "MyOptionalSecretKey");
 /// ```
 class EnvNetworkLoader extends EnvLoader<Uri> {
-  /// Loading encrypted .env from file from network.
+  /// Loading .env data from network.
   ///
   /// ```dart
   /// await Env.load(
-  ///   source: EnvLoader.network(Uri.parse('https://my.repo.dir/sub/.env')),
-  ///   password: "MyStrongPassword");
+  ///   EnvNetworkLoader(Uri.parse('https://my.repo.dir/sub/.env')),
+  ///   "MyOptionalSecretKey");
   /// ```
   const EnvNetworkLoader(super.source);
 
@@ -140,22 +103,43 @@ class EnvNetworkLoader extends EnvLoader<Uri> {
   EnvLoaderType type() => EnvLoaderType.network;
 }
 
-/// A class to help user load their encrypted .env from string.
+/// A class to help user load their .env data from [String].
 ///
 /// ```dart
 /// await Env.load(
-///   source: EnvLoader.string('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
-///   password: "MyStrongPassword");
+///   EnvStringLoader('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
+///   "MyOptionalSecretKey");
 /// ```
 class EnvStringLoader extends EnvLoader<String> {
-  /// Loading encrypted .env from file from string.
+  /// Loading .env data from [String].
   ///
   /// ```dart
   /// await Env.load(
-  ///   source: EnvLoader.string('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
-  ///   password: "MyStrongPassword");
+  ///   EnvStringLoader('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
+  ///   "MyOptionalSecretKey");
   /// ```
   const EnvStringLoader(super.source);
+
+  @override
+  EnvLoaderType type() => EnvLoaderType.string;
+}
+
+/// A class to help user load their .env data from [String].
+///
+/// ```dart
+/// await Env.load(
+///   EnvAssetLoader('assets/env/.env'),
+///   "MyOptionalSecretKey");
+/// ```
+class EnvAssetLoader extends EnvLoader<String> {
+  /// Loading .env data from [String].
+  ///
+  /// ```dart
+  /// await Env.load(
+  ///   EnvAssetLoader('assets/env/.env'),
+  ///   "MyOptionalSecretKey");
+  /// ```
+  const EnvAssetLoader(super.source);
 
   @override
   EnvLoaderType type() => EnvLoaderType.string;

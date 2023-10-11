@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:encryptor/encryptor.dart';
-import 'package:universal_file/universal_file.dart';
 
 part 'src/file.dart';
 part 'src/pubspec.dart';
