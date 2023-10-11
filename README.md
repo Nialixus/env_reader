@@ -57,19 +57,18 @@ Load the env_reader instance:
 ```dart
 import 'package:env_reader/env_reader.dart';
 
-String asset = await rootBundle.loadString('assets/env/.env');
 await Env.load(
-  EnvLoader.string(asset),
+  EnvAssetLoader('assets/env/.env'),
   "MyOptionalSecretKey");
 
 // Or you can load by creating your own `EnvReader` instance.
 
-String asset = await rootBundle.loadString('assets/env/.env');
 EnvReader production = EnvReader();
 await production.load(
-  EnvLoader.string(asset),
+  EnvAssetLoader(asset),
   "MyOptionalSecretKey");
 ```
+
 ### 4. Access your configuration
 To get and read the value of your env:
 ```dart
