@@ -103,15 +103,17 @@ Available commands:
 | Flag                     | Description                                                  |
 |--------------------------|--------------------------------------------------------------|
 | -i, --input (mandatory)  | Input path of the .env file                                  |
-| -s, --key                | Secrey key for encryption & decryption                       |
 | -o, --output             | Output path for the encrypted .env file                      |
-| --model                  | Generate dart model file to your desired path                |
-| -h, --[no-]help          | Print usage information                                      |
+| -s, --key                | Secrey key for encryption & decryption                       |
+| --model                  | Generate dart model file to your desired file path           |
 | --null-safety            | Make the model null safety                                   |
+| --[no-]obfuscate         | Obfuscating generated values of model                        |
+|                          | (defaults to on)                                             |
 | --[no-]pubspec           | Insert asset path to pubspec.yaml                            |
 |                          | (defaults to on)                                             |
-| --[no-]gitignore         | Insert .env input and output file into .gitignore            |
+| --[no-]gitignore         | Insert .env input & output file into .gitignore              |
 |                          | (defaults to on)                                             |
+| -h, --help               | Print usage information                                      |
 
 Example usage:
 ```bash
