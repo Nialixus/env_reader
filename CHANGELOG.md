@@ -51,3 +51,6 @@
 * Update pubspec
 * Remove asset loader
 * Remove `sdk` flag in `env_reader` cli
+
+## 2.0.2
+* Remove flutter from pubspec
