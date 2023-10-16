@@ -1,4 +1,4 @@
-part of '../../env_reader_core.dart';
+part of 'package:env_reader/env_reader.dart';
 
 /// A utility class for parsing environment variables from a given input string.
 ///

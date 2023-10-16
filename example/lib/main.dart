@@ -1,11 +1,12 @@
 import 'package:env_reader/env_reader.dart';
 import 'package:example/src/env_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Env.load(
-    const EnvAssetLoader('assets/env/.env'),
+    EnvStringLoader(await rootBundle.loadString('assets/env/.env')),
     "MyOptionalSecretKey",
   );
   runApp(

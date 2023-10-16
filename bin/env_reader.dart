@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
-
 import 'package:args/args.dart';
-import 'package:env_reader/env_reader_core.dart' show EnvEncryption;
+import 'package:env_reader/env_reader.dart' show EnvEncryption;
 
 part 'src/file.dart';
 part 'src/pubspec.dart';
@@ -23,10 +22,6 @@ void main(List<String> arguments) async {
         defaultsTo: false, negatable: false, help: 'Make the model null safety')
     ..addFlag('obfuscate',
         defaultsTo: true, help: 'Obfuscating generated values of model')
-    ..addOption('sdk',
-        help: 'Choose between generating model for flutter or dart project',
-        allowed: ['dart', 'flutter'],
-        defaultsTo: 'flutter')
     ..addFlag('pubspec',
         defaultsTo: true, help: 'Inserting asset path to pubspec.yaml')
     ..addFlag('gitignore',

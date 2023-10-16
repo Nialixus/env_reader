@@ -1,8 +1,12 @@
 name: env_reader
 description: Read, encrypt, or generate environment variables from a .env file
   into an obfuscated Dart model.
-version: 2.0.0
-homepage: https://github.com/Nialixus/env_reader.git
+version: 2.0.1
+homepage: https://github.com/Nialixus/env_reader
+repository: https://github.com/Nialixus/env_reader.git
+issue_tracker: https://github.com/Nialixus/env_reader/issues
+executables:
+  env_reader: env_reader
 funding:
   - https://www.buymeacoffee.com/nialixus
 screenshots:
@@ -11,20 +15,23 @@ screenshots:
 topics:
   - utility
   - env
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
-  flutter: '>=1.17.0'
 
 dependencies:
   args: ^2.4.2
   cryptography: ^2.7.0
-  flutter:
-    sdk: flutter
   http: ^1.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-flutter: null

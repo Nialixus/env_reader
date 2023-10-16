@@ -1,4 +1,4 @@
-part of '../../env_reader_core.dart';
+part of 'package:env_reader/env_reader.dart';
 
 /// Used to refering where's the .env file came from.
 abstract class EnvLoader<T extends Object> {

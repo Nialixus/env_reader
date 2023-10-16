@@ -4,7 +4,6 @@ part of '../env_reader.dart';
 /// A function to generate dart model out of .env file
 void insertJson({required ArgResults from}) {
   String? model = from["model"]?.toString();
-  bool isFlutter = from["sdk"] == 'flutter';
   if (model != null) {
     // Fetching arguments
     String path = model.replaceAll(RegExp(r'/[^/]+$'), "/");
@@ -55,7 +54,7 @@ void insertJson({required ArgResults from}) {
 // Env Reader Auto-Generated Model File
 // Created at ${DateTime.now()}
 // 🍔 [Buy me a coffee](https://www.buymeacoffee.com/nialixus) 🚀
-${obfuscate ? "import 'package:env_reader/env_reader${isFlutter ? '' : '_core'}.dart';\n" : ''}
+${obfuscate ? "import 'package:env_reader/env_reader.dart';\n" : ''}
 ${obfuscate ? "/// This class represents environment variables parsed from the .env file.\n/// Each static variable corresponds to an environment variable,${nullSafety ? "\n/// with default values provided for safety\n/// `false` for [bool], `0` for [int], `0.0` for [double] and `VARIABLE_NAME` for [String]." : ""}" : "/// Class wrapper for duplicated values copied directly from env file"}
 class $name {
 $cast

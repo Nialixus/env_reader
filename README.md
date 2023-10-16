@@ -38,46 +38,47 @@ DEBUG=true
 PORT=8080
 DATABASE_URL=postgresql://user:password@localhost:5432/mydb
 ```
+---
 
 ### 2. Run the command (Optional)
 Now, if you want to generate encrypted env file, run this command in your terminal:
 ```bash
-dart run env_reader --input=".env" --output="assets/env/" --key="MyOptionalSecretKey"
+env_reader --input=".env" --output="assets/env/" --key="MyOptionalSecretKey"
 ```
 > [!NOTE]
 > **`output:`** .env successfully encrypted into assets/env/.env 🚀
 
 also if you want to generate dart model from this env file, use tihs:
 ```bash
-dart run env_reader --input-".env" --model="lib/src/env_model.dart" --null-safety
+env_reader --input-".env" --model="lib/src/env_model.dart" --null-safety
 ```
 > [!NOTE]
 > **`output:`** .env successfully generated into lib/src/env_model.dart 🎉
+---
 
 ### 3. Loading your .env
 Load the env_reader instance:
 ```dart
 import 'package:env_reader/env_reader.dart';
-// If you want to use env_reader for dart projects only, call this instead ↓↓
-import 'package:env_reader/env_reader_core.dart';
+import 'package:flutter/services.dart';
 
 await Env.load(
-  EnvAssetLoader('assets/env/.env'),
+  EnvStringLoader(await rootBundle.loadString('assets/env/.env')),
   "MyOptionalSecretKey");
 
 // Or you can load by creating your own `EnvReader` instance.
 
 EnvReader production = EnvReader();
 await production.load(
-  EnvAssetLoader(asset),
+  EnvStringLoader(await rootBundle.loadString('assets/env/.env')),
   "MyOptionalSecretKey");
 ```
+---
 
 ### 4. Access your configuration
 To get and read the value of your env:
 ```dart
-import 'package:env_reader/env_reader.dart'; // for flutter project
-import 'package:env_reader/env_reader_core.dart'; // for dart project
+import 'package:env_reader/env_reader.dart';
 import 'package:my_package/src/env_model.dart';
 
 String api = Env.read("API_KEY") ?? "Got'cha 😎";
@@ -100,6 +101,7 @@ Text(
     EnvModel.debug ? "🤫 pssst, this is my api key y'all \n\n ${EnvModel.apiKey}" : "Nothing to see here 🤪",
 );
 ```
+---
 
 ## Env Reader Command 🚀
 Available commands:
@@ -113,8 +115,6 @@ Available commands:
 | --null-safety            | Make the model null safety                                   |
 | --[no-]obfuscate         | Obfuscating generated values of model                        |
 |                          | (defaults to on)                                             |
-| --sdk                    | Choose between generating model for flutter or dart project  |
-|                          | [dart, flutter (default)]                                    |
 | --[no-]pubspec           | Insert asset path to pubspec.yaml                            |
 |                          | (defaults to on)                                             |
 | --[no-]gitignore         | Insert .env input & output file into .gitignore              |
@@ -123,7 +123,7 @@ Available commands:
 
 Example usage:
 ```bash
-dart run env_reader -i ".env" -o "assets/env/" -s "MyOptionalSecretKey" --model="lib/src/env_model.dart" --null-safety --sdk flutter
+env_reader -i ".env" -o "assets/env/" -s "MyOptionalSecretKey" --model="lib/src/env_model.dart" --null-safety
 ```
 
 
