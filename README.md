@@ -42,15 +42,17 @@ DATABASE_URL=postgresql://user:password@localhost:5432/mydb
 ### 2. Run the command (Optional)
 Now, if you want to generate encrypted env file, run this command in your terminal:
 ```bash
-dart run env_reader --input=".env" --output="assets/env/" --key="MyOptionalSecretKey" --model="lib/src/env_model.dart" --null-safety
+dart run env_reader --input=".env" --output="assets/env/" --key="MyOptionalSecretKey"
 ```
-This will be resulting a triumphant message like this:
+> [!NOTE]
+> **`output:`** .env successfully encrypted into assets/env/.env 🚀
+
+also if you want to generate dart model from this env file, use tihs:
 ```bash
-Building package executable... (1.3s)
-Built env_reader:env_reader.
-.env successfully generated into lib/src/env_model.dart 🎉
-.env successfully encrypted into assets/env/.env 🚀
+dart run env_reader --input-".env" --model="lib/src/env_model.dart" --null-safety
 ```
+> [!NOTE]
+> **`output:`** .env successfully generated into lib/src/env_model.dart 🎉
 
 ### 3. Loading your .env
 Load the env_reader instance:
