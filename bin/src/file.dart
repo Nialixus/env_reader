@@ -2,7 +2,7 @@
 part of '../env_reader.dart';
 
 /// A function to take the .env file from given [input] into a more secured version inside [directory].
-void insertFile({required ArgResults from}) {
+void insertFile({required ArgResults from}) async {
   String input = from['input']!.toString();
   String? output = from["output"]?.toString();
   if (output != null) {
@@ -19,8 +19,8 @@ void insertFile({required ArgResults from}) {
 
     String? key = from['key']?.toString();
     if (key != null) {
-      File asset = File(directory.path + name)
-        ..writeAsStringSync(Encryptor.encrypt(key, data));
+      String encrypted = await EnvEncryption(key).encrypt(data);
+      File asset = File(directory.path + name)..writeAsStringSync(encrypted);
       print(
           "\x1B[32m$input\x1B[0m successfully encrypted into \x1B[34m${asset.path}\x1B[0m 🚀");
     } else {

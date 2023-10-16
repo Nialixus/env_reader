@@ -12,7 +12,7 @@ Read, encrypt, or generate environment variables from .env file into an obfuscat
 - **Seamless Integration:** Directly update your pubspec.yaml and .gitignore on command. No need manual labor. 🛠️ 
 - **Fortified Encryption:** Shield your precious .env configurations with an encryption. Say no to prying eyes.🔒  
 - **Data Diversity Unleashed:** Whether they're integers, decimals, booleans, or strings. Automatic interpretation is at your service. 🎮
-- **Versatile Sourcing**: Load your .env from various sources-~~assets~~, files, memory, network, and strings. The choice is yours. 🔄
+- **Versatile Sourcing**: Load your .env from various sources: assets, files, memory, network, and strings. The choice is yours. 🔄
 
 ## Install 🚀
 Get started with these quick commands:
@@ -56,6 +56,8 @@ Built env_reader:env_reader.
 Load the env_reader instance:
 ```dart
 import 'package:env_reader/env_reader.dart';
+// If you want to use env_reader for dart projects only, call this instead ↓↓
+import 'package:env_reader/env_reader_core.dart';
 
 await Env.load(
   EnvAssetLoader('assets/env/.env'),
@@ -72,7 +74,8 @@ await production.load(
 ### 4. Access your configuration
 To get and read the value of your env:
 ```dart
-import 'package:env_reader/env_reader.dart';
+import 'package:env_reader/env_reader.dart'; // for flutter project
+import 'package:env_reader/env_reader_core.dart'; // for dart project
 import 'package:my_package/src/env_model.dart';
 
 String api = Env.read("API_KEY") ?? "Got'cha 😎";
@@ -108,6 +111,8 @@ Available commands:
 | --null-safety            | Make the model null safety                                   |
 | --[no-]obfuscate         | Obfuscating generated values of model                        |
 |                          | (defaults to on)                                             |
+| --sdk                    | Choose between generating model for flutter or dart project  |
+|                          | [dart, flutter (default)]                                    |
 | --[no-]pubspec           | Insert asset path to pubspec.yaml                            |
 |                          | (defaults to on)                                             |
 | --[no-]gitignore         | Insert .env input & output file into .gitignore              |
@@ -116,7 +121,7 @@ Available commands:
 
 Example usage:
 ```bash
-dart run env_reader -i ".env" -o "assets/env/" -s "MyOptionalSecretKey" --model="lib/src/env_model.dart" --null-safety
+dart run env_reader -i ".env" -o "assets/env/" -s "MyOptionalSecretKey" --model="lib/src/env_model.dart" --null-safety --sdk flutter
 ```
 
 

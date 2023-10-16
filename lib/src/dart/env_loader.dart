@@ -1,27 +1,6 @@
-part of '../env_reader.dart';
+part of '../../env_reader_core.dart';
 
-/// Enumeration representing various types of sources for loading encrypted .env
-enum EnvLoaderType {
-  /// Load environment configuration from an asset.
-  asset,
-
-  /// Load environment configuration from a file.
-  file,
-
-  /// Load environment configuration from memory.
-  memory,
-
-  /// Load environment configuration from a network source.
-  network,
-
-  /// Load environment configuration from a string.
-  string;
-
-  /// Default constructor of [EnvLoaderType].
-  const EnvLoaderType();
-}
-
-/// Used to refering where's the encrypted .env file came from.
+/// Used to refering where's the .env file came from.
 abstract class EnvLoader<T extends Object> {
   /// Creates an [EnvLoader] instance with the specified [source].
   ///
@@ -30,13 +9,11 @@ abstract class EnvLoader<T extends Object> {
   /// ```
   const EnvLoader(this.source);
 
-  /// The source of encrypted .env object
+  /// The source of .env object
   final T source;
 
-  /// Indicating what type the encrypted .env is
-  ///
-  /// Consist of [EnvLoaderType.asset], [EnvLoaderType.file], [EnvLoaderType.memory], [EnvLoaderType.network] and [EnvLoaderType.string]
-  EnvLoaderType type();
+  /// Parse [source] into [String] data.
+  Future<String> data([String? key]);
 }
 
 /// A class to help user load their .env data from [File].
@@ -44,7 +21,8 @@ abstract class EnvLoader<T extends Object> {
 /// ```dart
 /// await Env.load(
 ///   EnvFileLoader(File('.env')),
-///   "MyOptionalSecretKey");
+///   'MyOptionalSecretKey'
+/// );
 /// ```
 class EnvFileLoader extends EnvLoader<File> {
   /// Loading .env data from [File]. Make sure this file is accessible in your project.
@@ -53,12 +31,16 @@ class EnvFileLoader extends EnvLoader<File> {
   /// ```dart
   /// await Env.load(
   ///   EnvFileLoader(File('.env')),
-  ///   "MyOptionalSecretKey");
+  ///   'MyOptionalSecretKey'
+  /// );
   /// ```
   const EnvFileLoader(super.source);
 
   @override
-  EnvLoaderType type() => EnvLoaderType.file;
+  Future<String> data([String? key]) async {
+    String data = source.readAsStringSync();
+    return key != null ? await EnvEncryption(key).decrypt(data) : data;
+  }
 }
 
 /// A class to help user load their .env data from [Uint8List].
@@ -66,7 +48,8 @@ class EnvFileLoader extends EnvLoader<File> {
 /// ```dart
 /// await Env.load(
 ///   EnvMemoryLeader(Uint8List.fromList([123,456,789])),
-///   "MyOptionalSecretKey");
+///   'MyOptionalSecretKey'
+/// );
 /// ```
 class EnvMemoryLoader extends EnvLoader<Uint8List> {
   /// Loading .env data from [Uint8List].
@@ -74,12 +57,16 @@ class EnvMemoryLoader extends EnvLoader<Uint8List> {
   /// ```dart
   /// await Env.load(
   ///   EnvMemoryLoader(Uint8List.fromList([123,456,789])),
-  ///   "MyOptionalSecretKey");
+  ///   'MyOptionalSecretKey'
+  /// );
   /// ```
   const EnvMemoryLoader(super.source);
 
   @override
-  EnvLoaderType type() => EnvLoaderType.memory;
+  Future<String> data([String? key]) async {
+    String data = String.fromCharCodes(source);
+    return key != null ? await EnvEncryption(key).decrypt(data) : data;
+  }
 }
 
 /// A class to help user load their .env data from network.
@@ -87,7 +74,8 @@ class EnvMemoryLoader extends EnvLoader<Uint8List> {
 /// ```dart
 /// await Env.load(
 ///   EnvNetworkLoader(Uri.parse('https://my.repo.dir/sub/.env')),
-///   "MyOptionalSecretKey");
+///   'MyOptionalSecretKey'
+/// );
 /// ```
 class EnvNetworkLoader extends EnvLoader<Uri> {
   /// Loading .env data from network.
@@ -95,12 +83,18 @@ class EnvNetworkLoader extends EnvLoader<Uri> {
   /// ```dart
   /// await Env.load(
   ///   EnvNetworkLoader(Uri.parse('https://my.repo.dir/sub/.env')),
-  ///   "MyOptionalSecretKey");
+  ///   'MyOptionalSecretKey'
+  /// );
   /// ```
   const EnvNetworkLoader(super.source);
 
   @override
-  EnvLoaderType type() => EnvLoaderType.network;
+  Future<String> data([String? key]) async {
+    Response response = await get(source);
+    return key != null
+        ? await EnvEncryption(key).decrypt(response.body)
+        : response.body;
+  }
 }
 
 /// A class to help user load their .env data from [String].
@@ -108,7 +102,8 @@ class EnvNetworkLoader extends EnvLoader<Uri> {
 /// ```dart
 /// await Env.load(
 ///   EnvStringLoader('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
-///   "MyOptionalSecretKey");
+///   'MyOptionalSecretKey'
+/// );
 /// ```
 class EnvStringLoader extends EnvLoader<String> {
   /// Loading .env data from [String].
@@ -116,31 +111,15 @@ class EnvStringLoader extends EnvLoader<String> {
   /// ```dart
   /// await Env.load(
   ///   EnvStringLoader('GDE6V1uW1u0Z+LmxdgzW/vHLg1p/CXnYW08...'),
-  ///   "MyOptionalSecretKey");
+  ///   'MyOptionalSecretKey'
+  /// );
   /// ```
   const EnvStringLoader(super.source);
 
   @override
-  EnvLoaderType type() => EnvLoaderType.string;
-}
-
-/// A class to help user load their .env data from [String].
-///
-/// ```dart
-/// await Env.load(
-///   EnvAssetLoader('assets/env/.env'),
-///   "MyOptionalSecretKey");
-/// ```
-class EnvAssetLoader extends EnvLoader<String> {
-  /// Loading .env data from [String].
-  ///
-  /// ```dart
-  /// await Env.load(
-  ///   EnvAssetLoader('assets/env/.env'),
-  ///   "MyOptionalSecretKey");
-  /// ```
-  const EnvAssetLoader(super.source);
-
-  @override
-  EnvLoaderType type() => EnvLoaderType.string;
+  Future<String> data([String? key]) async {
+    return key != null
+        ? await EnvEncryption(key).decrypt(source.toString())
+        : source.toString();
+  }
 }

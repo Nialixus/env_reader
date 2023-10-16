@@ -41,3 +41,8 @@
 * Restore flutter to pubspec
 * Restore asset loader
 * Remove universal_file
+
+## 2.0.0
+* Split between reader for dart as `env_reader_core` and `env_reader` for flutter
+* Add `sdk` flag option in `env_reader` cli
+* Change `encryptor` to `cryptography`
