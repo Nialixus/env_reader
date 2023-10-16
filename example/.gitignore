@@ -1,6 +1,4 @@
-# Env Reader related
-assets/env/
-.env
+
 # Miscellaneous
 *.class
 *.log
