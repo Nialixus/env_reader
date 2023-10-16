@@ -1,4 +1,6 @@
-part of 'package:env_reader/env_reader.dart';
+import 'dart:developer';
+
+export 'env_parser.dart' hide EnvParser;
 
 /// A utility class for parsing environment variables from a given input string.
 ///

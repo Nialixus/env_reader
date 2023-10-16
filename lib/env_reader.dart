@@ -19,18 +19,14 @@
 library env_reader;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:cryptography/cryptography.dart';
+import 'package:env_reader/src/env_encryption.dart';
+import 'package:env_reader/src/env_parser.dart';
 import 'package:http/http.dart';
 
-export 'env_reader.dart' hide EnvParser, EnvEncryption;
-
 part 'package:env_reader/src/env_loader.dart';
-part 'package:env_reader/src/env_parser.dart';
-part 'package:env_reader/src/env_encryption.dart';
 
 /// A utility class for reading environment variables from .env source into your dart project.
 class Env {

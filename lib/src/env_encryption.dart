@@ -1,4 +1,7 @@
-part of 'package:env_reader/env_reader.dart';
+import 'dart:convert';
+import 'package:cryptography/cryptography.dart';
+
+export 'env_encryption.dart' hide EnvEncryption;
 
 /// A utility class for encrypting and decrypting data using AES-GCM encryption.
 ///

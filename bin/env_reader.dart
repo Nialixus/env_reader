@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:env_reader/env_reader.dart' show EnvEncryption;
+import 'package:env_reader/src/env_encryption.dart';
 
 part 'src/file.dart';
 part 'src/pubspec.dart';
 part 'src/json.dart';
 part 'src/gitignore.dart';
 
-/// Dart runner for [EnvReader] library.
+/// Dart runner for `EnvReader` library.
 void main(List<String> arguments) async {
   ArgParser runner = ArgParser()
     ..addOption('input',

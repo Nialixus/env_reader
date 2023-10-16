@@ -54,3 +54,7 @@
 
 ## 2.0.2
 * Remove flutter from pubspec
+
+## 2.0.3
+* Hide EnvEncryption
+* Hide EnvParser
