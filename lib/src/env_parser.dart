@@ -72,7 +72,7 @@ class EnvParser {
         }
       } catch (e) {
         // [10] Tell user that env value was unable to be parsed.
-        log("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Parsing failed on line ${index + 1}\u001b[0m 💥\n$e\n\n");
+        log("\u001b[1mEnvReader:\u001b[31m Parsing failed on line ${index + 1}\u001b[0m 💥\n$e");
       }
     }
     return data;

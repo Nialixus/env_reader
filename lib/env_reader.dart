@@ -82,7 +82,7 @@ class EnvReader {
     try {
       value = await source.data(key);
     } catch (e) {
-      log("\n\n\u001b[1m[ENV_READER]\u001b[31m 💥 Unable to load data\u001b[0m 💥\n$e\n\n");
+      log("\u001b[1mEnvReader:\u001b[31m Unable to load data\u001b[0m\n$e");
     }
   }
 

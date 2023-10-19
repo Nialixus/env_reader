@@ -7,7 +7,7 @@ Future<void> main(List<String> arguments) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Env.load(
     EnvStringLoader(await rootBundle.loadString('assets/env/.env')),
-    "MyOptionalSecretKey",
+    "Nigam.123",
   );
   runApp(
     const MaterialApp(

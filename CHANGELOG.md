@@ -58,3 +58,6 @@
 ## 2.0.3
 * Hide EnvEncryption
 * Hide EnvParser
+
+## 2.1.0
+* Downgrade `cryptography`.
